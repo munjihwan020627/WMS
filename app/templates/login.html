@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="login-wrapper">
+        <h2>Login</h2>
+        <form method="post" action="서버의url" id="login-form">
+            <input type="text" name="userName" placeholder="Email">
+            <input type="password" name="userPassword" placeholder="Password">
+            <label for="remember-check">
+                <input type="checkbox" id="remember-check">아이디 저장하기
+            </label>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+channel1<input type="radio" name="myradio">
+channel2<input type="radio" name="myradio">
+channel3<input type="radio" name="myradio">
+
+<button type="button" onclick="location.href='/'">home</button>
+
+
+<script>
+document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // 기본 폼 제출 동작을 막습니다.
+
+    const email = this.userName.value;
+    const password = this.userPassword.value;
+
+    fetch('/your-login-api-endpoint', { // 실제 서버 로그인 API 엔드포인트로 변경
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userName: email, userPassword: password }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('로그인 성공!');
+            const selectedChannel = document.querySelector('input[name="myradio"]:checked');
+            if (selectedChannel) {
+                window.location.href = '/' + selectedChannel.nextSibling.textContent.trim();
+            } else {
+                window.location.href = '/channel1';
+            }
+        } else {
+            alert(data.message || '로그인 실패'); // 서버에서 보낸 오류 메시지 표시
+        }
+    })
+    .catch(error => {
+        console.error('로그인 요청 오류:', error);
+        alert('로그인 요청 중 오류가 발생했습니다.');
+    });
+});
+</script>
+</body>
+</html>
